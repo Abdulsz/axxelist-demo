@@ -49,3 +49,33 @@ export type SimilarResult = {
   listing: Listing;
   tradeoff: string;
 };
+
+export type LandlordCopyGeneratorFormValues = {
+  bedrooms: number;
+  bathrooms: number;
+  sqft: number;
+  neighborhood: string;
+  rent: number;
+  pet_policy: "none" | PetsPolicy;
+  amenities: string[];
+  standout_notes: string;
+};
+
+export type LandlordVisionSummary = {
+  style: string;
+  condition: string;
+  natural_light: string;
+  notable_features: string[];
+  room_cues: string[];
+  confidence_note: string;
+};
+
+export type LandlordGeneratedCopy = {
+  title: string;
+  description: string;
+};
+
+export type LandlordCopyGeneratorResponse = {
+  generated_copy: LandlordGeneratedCopy;
+  vision_summary: LandlordVisionSummary;
+};
