@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import type { Listing, ToolEvent } from "@/lib/types";
 import { ListingsGrid } from "@/components/listings-grid";
 import { ListingDetailDrawer } from "@/components/listing-detail-drawer";
@@ -93,9 +94,17 @@ export function ListingsWorkspace({ initialListings }: ListingsWorkspaceProps) {
                 {effectiveListings.length} shown of {effectiveAllListings.length} listings.
               </p>
             </div>
-            <Button variant="outline" onClick={resetDemo}>
-              Reset demo
-            </Button>
+            <div className="flex items-center gap-2">
+              <Link
+                href="/landlord"
+                className="inline-flex items-center rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-100"
+              >
+                Landlord workspace
+              </Link>
+              <Button variant="outline" onClick={resetDemo}>
+                Reset demo
+              </Button>
+            </div>
           </div>
           <div className="mt-3">
             <FilterChips filters={appliedFilters} />
