@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getOpenAIClient } from "@/lib/openai";
+import type { Response } from "openai/resources/responses/responses";
 import type { LandlordGeneratedCopyResponse, LandlordVisionSummary } from "@/lib/types";
 
 const formSchema = z.object({
@@ -44,15 +45,6 @@ const generatedCopySchema = z.object({
   description: z.string().min(80).max(2200),
 });
 
-type OpenAIResponseFormat = {
-  type: "json_schema";
-  json_schema: {
-    name: string;
-    strict: true;
-    schema: Record<string, unknown>;
-  };
-};
-
 function toDataUrl(file: File, base64: string) {
   const mime = file.type || "image/jpeg";
   return `data:${mime};base64,${base64}`;
@@ -71,6 +63,12 @@ function withTimeout<T>(promise: Promise<T>, timeoutMs: number, label: string): 
         reject(error);
       });
   });
+}
+
+function getOutputText(response: Response): string {
+  const maybeText = response.output_text?.trim();
+  if (maybeText) return maybeText;
+  throw new Error("Model response did not include text output.");
 }
 
 export async function POST(request: Request) {
@@ -124,29 +122,9 @@ export async function POST(request: Request) {
       }),
     );
 
-    const visionFormat: OpenAIResponseFormat = {
-      type: "json_schema",
-      json_schema: {
-        name: "landlord_vision_summary",
-        strict: true,
-        schema: {
-          type: "object",
-          additionalProperties: false,
-          required: ["styleKeywords", "naturalLight", "condition", "notableFeatures", "likelyRoomTypes", "confidenceNote"],
-          properties: {
-            styleKeywords: { type: "array", minItems: 1, maxItems: 6, items: { type: "string" } },
-            naturalLight: { type: "string", enum: ["low", "medium", "high"] },
-            condition: { type: "string", enum: ["needs-updates", "good", "renovated"] },
-            notableFeatures: { type: "array", minItems: 1, maxItems: 8, items: { type: "string" } },
-            likelyRoomTypes: { type: "array", minItems: 1, maxItems: 8, items: { type: "string" } },
-            confidenceNote: { type: "string", minLength: 5, maxLength: 240 },
-          },
-        },
-      },
-    };
-
     const visionResponse = await withTimeout(
       client.responses.create({
+        stream: false,
         model: "gpt-4o-mini",
         temperature: 0.2,
         input: [
@@ -162,45 +140,46 @@ export async function POST(request: Request) {
                 type: "input_text",
                 text: "Review these listing photos and extract concise visual attributes for marketing copy.",
               },
-              ...imageBlocks,
+              ...imageBlocks.map((block) => ({ ...block, detail: "low" as const })),
             ],
           },
         ],
         text: {
-          format: visionFormat,
+          format: {
+            type: "json_schema",
+            name: "landlord_vision_summary",
+            strict: true,
+            schema: {
+              type: "object",
+              additionalProperties: false,
+              required: ["styleKeywords", "naturalLight", "condition", "notableFeatures", "likelyRoomTypes", "confidenceNote"],
+              properties: {
+                styleKeywords: { type: "array", minItems: 1, maxItems: 6, items: { type: "string" } },
+                naturalLight: { type: "string", enum: ["low", "medium", "high"] },
+                condition: { type: "string", enum: ["needs-updates", "good", "renovated"] },
+                notableFeatures: { type: "array", minItems: 1, maxItems: 8, items: { type: "string" } },
+                likelyRoomTypes: { type: "array", minItems: 1, maxItems: 8, items: { type: "string" } },
+                confidenceNote: { type: "string", minLength: 5, maxLength: 240 },
+              },
+            },
+          },
         },
       }),
       30000,
       "Image understanding stage",
     );
 
-    const visionRaw = visionResponse.output_text;
+    const visionRaw = getOutputText(visionResponse);
     const visionParsed = visionSummarySchema.safeParse(JSON.parse(visionRaw));
     if (!visionParsed.success) {
       throw new Error("Could not parse image understanding output.");
     }
     const visionSummary: LandlordVisionSummary = visionParsed.data;
 
-    const copyFormat: OpenAIResponseFormat = {
-      type: "json_schema",
-      json_schema: {
-        name: "landlord_generated_copy",
-        strict: true,
-        schema: {
-          type: "object",
-          additionalProperties: false,
-          required: ["title", "description"],
-          properties: {
-            title: { type: "string", minLength: 5, maxLength: 80 },
-            description: { type: "string", minLength: 80, maxLength: 2200 },
-          },
-        },
-      },
-    };
-
     const facts = parsedFacts.data;
     const copyResponse = await withTimeout(
       client.responses.create({
+        stream: false,
         model: "gpt-4o",
         temperature: 0.7,
         input: [
@@ -225,14 +204,27 @@ export async function POST(request: Request) {
           },
         ],
         text: {
-          format: copyFormat,
+          format: {
+            type: "json_schema",
+            name: "landlord_generated_copy",
+            strict: true,
+            schema: {
+              type: "object",
+              additionalProperties: false,
+              required: ["title", "description"],
+              properties: {
+                title: { type: "string", minLength: 5, maxLength: 80 },
+                description: { type: "string", minLength: 80, maxLength: 2200 },
+              },
+            },
+          },
         },
       }),
       30000,
       "Copy generation stage",
     );
 
-    const copyRaw = copyResponse.output_text;
+    const copyRaw = getOutputText(copyResponse);
     const generatedCopyParsed = generatedCopySchema.safeParse(JSON.parse(copyRaw));
     if (!generatedCopyParsed.success) {
       throw new Error("Could not parse generated listing copy.");
