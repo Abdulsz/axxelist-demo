@@ -49,3 +49,39 @@ export type SimilarResult = {
   listing: Listing;
   tradeoff: string;
 };
+
+export type LandlordPetPolicy = "none" | "cats" | "dogs" | "both";
+
+export type LandlordCopyFacts = {
+  bedrooms: number;
+  bathrooms: number;
+  sqft?: number;
+  neighborhood: string;
+  rent: number;
+  petPolicy: LandlordPetPolicy;
+  amenities: string[];
+  standoutNotes?: string;
+};
+
+export type LandlordCopyFormPayload = LandlordCopyFacts & {
+  photos: File[];
+};
+
+export type LandlordVisionSummary = {
+  styleKeywords: string[];
+  naturalLight: "low" | "medium" | "high";
+  condition: "needs-updates" | "good" | "renovated";
+  notableFeatures: string[];
+  likelyRoomTypes: string[];
+  confidenceNote: string;
+};
+
+export type LandlordGeneratedCopy = {
+  title: string;
+  description: string;
+};
+
+export type LandlordGeneratedCopyResponse = {
+  visionSummary: LandlordVisionSummary;
+  generatedCopy: LandlordGeneratedCopy;
+};
