@@ -1,0 +1,239 @@
+[
+  {
+    "viewport": "mobile",
+    "initial": {
+      "viewport": {
+        "w": 390,
+        "h": 844
+      },
+      "rects": {
+        "logo": {
+          "x": 24,
+          "y": 60,
+          "w": 212.046875,
+          "h": 36
+        },
+        "chips": null,
+        "grid": null,
+        "chat": null,
+        "drawer": null
+      },
+      "body": {
+        "bg": "rgb(255, 255, 255)",
+        "color": "rgb(15, 23, 42)",
+        "lineHeight": "24px",
+        "rootFontSize": "16px"
+      },
+      "typography": {
+        "uniqueFontSizes": [
+          12,
+          14,
+          16,
+          18,
+          30
+        ]
+      },
+      "horizontalOverflow": false
+    },
+    "after": {
+      "viewport": {
+        "w": 390,
+        "h": 844
+      },
+      "rects": {
+        "logo": {
+          "x": 24,
+          "y": 60,
+          "w": 212.046875,
+          "h": 36
+        },
+        "chips": null,
+        "grid": null,
+        "chat": null,
+        "drawer": {
+          "x": 97.5,
+          "y": 0,
+          "w": 292.5,
+          "h": 844
+        }
+      },
+      "body": {
+        "bg": "rgb(255, 255, 255)",
+        "color": "rgb(15, 23, 42)",
+        "lineHeight": "24px",
+        "rootFontSize": "16px"
+      },
+      "typography": {
+        "uniqueFontSizes": [
+          12,
+          14,
+          16,
+          18,
+          20,
+          30
+        ]
+      },
+      "horizontalOverflow": false
+    },
+    "motionAttempted": false,
+    "drawerOpened": true
+  },
+  {
+    "viewport": "tablet",
+    "initial": {
+      "viewport": {
+        "w": 768,
+        "h": 1024
+      },
+      "rects": {
+        "logo": {
+          "x": 24,
+          "y": 60,
+          "w": 212.046875,
+          "h": 36
+        },
+        "chips": null,
+        "grid": null,
+        "chat": null,
+        "drawer": null
+      },
+      "body": {
+        "bg": "rgb(255, 255, 255)",
+        "color": "rgb(15, 23, 42)",
+        "lineHeight": "24px",
+        "rootFontSize": "16px"
+      },
+      "typography": {
+        "uniqueFontSizes": [
+          12,
+          14,
+          16,
+          18,
+          30
+        ]
+      },
+      "horizontalOverflow": false
+    },
+    "after": {
+      "viewport": {
+        "w": 768,
+        "h": 1024
+      },
+      "rects": {
+        "logo": {
+          "x": 24,
+          "y": 60,
+          "w": 212.046875,
+          "h": 36
+        },
+        "chips": null,
+        "grid": null,
+        "chat": null,
+        "drawer": {
+          "x": 384,
+          "y": 0,
+          "w": 384,
+          "h": 1024
+        }
+      },
+      "body": {
+        "bg": "rgb(255, 255, 255)",
+        "color": "rgb(15, 23, 42)",
+        "lineHeight": "24px",
+        "rootFontSize": "16px"
+      },
+      "typography": {
+        "uniqueFontSizes": [
+          12,
+          14,
+          16,
+          18,
+          20,
+          30
+        ]
+      },
+      "horizontalOverflow": false
+    },
+    "motionAttempted": false,
+    "drawerOpened": true
+  },
+  {
+    "viewport": "desktop",
+    "initial": {
+      "viewport": {
+        "w": 1440,
+        "h": 900
+      },
+      "rects": {
+        "logo": {
+          "x": 32,
+          "y": 60,
+          "w": 212.046875,
+          "h": 36
+        },
+        "chips": null,
+        "grid": null,
+        "chat": null,
+        "drawer": null
+      },
+      "body": {
+        "bg": "rgb(255, 255, 255)",
+        "color": "rgb(15, 23, 42)",
+        "lineHeight": "24px",
+        "rootFontSize": "16px"
+      },
+      "typography": {
+        "uniqueFontSizes": [
+          12,
+          14,
+          16,
+          18,
+          30
+        ]
+      },
+      "horizontalOverflow": false
+    },
+    "after": {
+      "viewport": {
+        "w": 1440,
+        "h": 900
+      },
+      "rects": {
+        "logo": {
+          "x": 32,
+          "y": 60,
+          "w": 212.046875,
+          "h": 36
+        },
+        "chips": null,
+        "grid": null,
+        "chat": null,
+        "drawer": {
+          "x": 1056,
+          "y": 0,
+          "w": 384,
+          "h": 900
+        }
+      },
+      "body": {
+        "bg": "rgb(255, 255, 255)",
+        "color": "rgb(15, 23, 42)",
+        "lineHeight": "24px",
+        "rootFontSize": "16px"
+      },
+      "typography": {
+        "uniqueFontSizes": [
+          12,
+          14,
+          16,
+          18,
+          20,
+          30
+        ]
+      },
+      "horizontalOverflow": false
+    },
+    "motionAttempted": false,
+    "drawerOpened": true
+  }
+]
